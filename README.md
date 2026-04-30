@@ -8,7 +8,7 @@ Build du backend :
 - npm run build
 - npm run start
 
-Générer Prisma (si nécessaire) :
+Générer Prisma :
 - npx prisma generate
 
 Appliquer les migrations :
