@@ -1,4 +1,6 @@
 services:
+
+  # Base de données principale
   db:
     image: postgres:15-alpine
     restart: always
@@ -16,7 +18,7 @@ services:
       timeout: 5s
       retries: 5
 
-
+  # Base de données dédiée aux tests
   db-test:
     image: postgres:15-alpine
     environment:
@@ -31,18 +33,49 @@ services:
       timeout: 5s
       retries: 5
 
-  app:
-    build: ./next-app
+  # Backend NestJS — applique les migrations puis démarre
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://leslie:leslie@db:5432/mydatabase
+      FRONTEND_URL: http://localhost:3000
+      PORT: 3001
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3001/urls',res=>process.exit(res.statusCode===200?0:1)).on('error',()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Frontend Next.js — attend que le backend soit prêt
+  frontend:
+    build: ./frontend
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: postgresql://leslie:leslie@db:5432/mydatabase
       AUTH_SECRET: "ecfd5dc46e627a47138a4b73c23a7f4e"
       AUTH_TRUST_HOST: "true"
+      BACKEND_URL: http://backend:3001
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
     depends_on:
       db:
         condition: service_healthy
-    command: sh -c "npx prisma migrate deploy && npm start"
+      backend:
+        condition: service_healthy
+    command: npm start
 
 volumes:
   db_data:
