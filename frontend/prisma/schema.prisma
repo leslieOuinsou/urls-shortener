@@ -1,0 +1,28 @@
+generator client {
+    provider        = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    password  String // Pour une vraie app, il faudra le hasher
+    name      String?
+    links     Link[] // Relation : Un utilisateur a plusieurs liens
+    createdAt DateTime @default(now())
+}
+
+model Link {
+    id        Int       @id @default(autoincrement())
+    shortCode String    @unique @db.VarChar(10)
+    longUrl   String    @db.Text
+    createdAt DateTime  @default(now())
+    expiresAt DateTime?
+
+    // La clé étrangère pour l'historique
+    userId Int?
+    user   User? @relation(fields: [userId], references: [id])
+}
