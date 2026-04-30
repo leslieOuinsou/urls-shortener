@@ -37,7 +37,7 @@ export default function Navbar() {
                     <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-default rounded-base bg-neutral-secondary-soft md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-neutral-primary">
                         {session && (
                             <li>
-                                <Link href="/history" className="block py-2 px-3 text-white bg-gray-100 rounded-sm md:bg-transparent md:text-black md:p-0 hover:underline" aria-current="page">Historique</Link>
+                                <Link href="/history" className="block py-2 px-3 text-black bg-gray-100 rounded-sm md:bg-transparent md:text-white md:p-0 hover:underline" aria-current="page">Historique</Link>
                             </li>
                         )}
                     </ul>

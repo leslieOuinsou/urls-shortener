@@ -61,7 +61,21 @@ export default function LoginPage() {
                             aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                             className="absolute inset-y-0 right-0 px-3 text-gray-500 hover:text-gray-700"
                         >
-                            {showPassword ? "🙈" : "👁"}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12S5.25 6.75 12 6.75 21.75 12 21.75 12 18.75 17.25 12 17.25 2.25 12 2.25 12Z" />
+                                <circle cx="12" cy="12" r="3" />
+                                {showPassword && (
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 20 20 4" />
+                                )}
+                            </svg>
                         </button>
                     </div>
                     <button
